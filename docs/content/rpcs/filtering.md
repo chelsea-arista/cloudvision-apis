@@ -1,7 +1,5 @@
 ---
-title: Filtering
-weight: 3
-pre: "<b>- </b>"
+title: "Filtering"
 ---
 
 Filtering is provided through a default and an (optional) additional model-specific mechanism. By default, all models support "partial equality filtering". Models that provide a custom filtering method will document this filter-message in its model documentation.

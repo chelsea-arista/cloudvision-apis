@@ -340,7 +340,7 @@ message ImageErrors {
 enum WarningCode {
     // WARNING_CODE_UNSPECIFIED indicates warning code is unspecified.
     WARNING_CODE_UNSPECIFIED = 0;
-    // WARNING_CODE_NOT_APPLICABLE represents cases where EOS <-> SKU/TA compatibility
+    // WARNING_CODE_NOT_APPLICABLE represents cases where EOS < - > SKU/TA compatibility
     // is not applicable for non physical switches like vEos.
     WARNING_CODE_NOT_APPLICABLE = 1;
     // WARNING_CODE_SKUINFO_UNAVAILABLE represents case where

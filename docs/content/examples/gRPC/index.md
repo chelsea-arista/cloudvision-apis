@@ -1,13 +1,11 @@
 ---
-title: gRPC
-weight: 100
-chapter: false
+title: "gRPC"
 ---
 
-{{% notice tip %}}
+:::tip
 For troubleshooting the following trace can be added before the `grpcurl` command:
 `GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info`
-{{% /notice %}}
+:::
 
 # gRPC API examples
 

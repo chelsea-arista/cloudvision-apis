@@ -4,24 +4,27 @@ on:
   push:
     branches:
     - trunk
+    - stable
 
 jobs:
   build-deploy:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@master
+    - name: Checkout repository
+      uses: actions/checkout@master
       with:
         submodules: true
+        fetch-depth: 0
 
-    - name: Setup Hugo
-      uses: peaceiris/actions-hugo@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
       with:
-        hugo-version: 'latest'
+        node-version: '18'
 
     - name: Install Protoc
       uses: arduino/setup-protoc@master
 
-    - name: Install Golang (for protoc-gen-doc)
+    - name: Setup Go
       uses: actions/setup-go@v2
       with:
         go-version: '^1.17.6'
@@ -29,12 +32,63 @@ jobs:
     - name: Install protoc-gen-doc
       run: go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
 
-    - name: Generate Docs
-      run: make -C docs
+    - name: Install dependencies
+      working-directory: docs
+      run: npm install
 
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v2.4.0
+    - name: Create directory
+      working-directory: docs/content
+      run: mkdir -p models
+
+    - name: Build generate_versions tool
+      working-directory: docs
+      run: go build -o generate_markdown generate_markdown.go
+
+    - name: Setup Git config
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+
+    - name: Determine new version tag
+      id: get_version
+      run: |
+        LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
+        echo "Latest tag: $LATEST_TAG"
+        if [ -z "$LATEST_TAG" ]; then
+          NEW_TAG="v1.0.0"
+        else
+          MAJOR=$(echo "$LATEST_TAG" | sed -E 's/^v([0-9]+)\..*/\1/')
+          NEW_MAJOR=$((MAJOR+1))
+          NEW_TAG="v${NEW_MAJOR}.0.0"
+        fi
+        echo "New tag: $NEW_TAG"
+        echo "::set-output name=new_tag::$NEW_TAG"
+
+    - name: Create and push new tag
+      run: |
+        NEW_TAG=${{ steps.get_version.outputs.new_tag }}
+        echo "Creating tag $NEW_TAG"
+        git tag -a "$NEW_TAG" -m "Version $NEW_TAG"
+        git push origin "$NEW_TAG"
       env:
-        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: ./docs/public
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Generate Docs
+      working-directory: docs
+      run: make
+
+    - name: Generate Versioned Docs
+      working-directory: docs
+      run: make version
+
+    - name: Build Docusaurus Site
+      working-directory: docs
+      run: npx docusaurus build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./docs/build
+          keep_files: true

@@ -1,13 +1,14 @@
 REPOROOT=../
 PROTODIRS=$(shell find $(REPOROOT)/arista -name "*.v*" -type d -exec basename {} \;)
 DOCTARGETS=$(patsubst %,%.md,$(PROTODIRS))
+VERSION_TAG=$(shell git describe --tags --abbrev=0 2>/dev/null || echo "latest")
 
 .PHONY: default
 default: docs
 
 .PHONY: docs
 docs: $(DOCTARGETS)
-	hugo --gc --minify --cleanDestinationDir
+	@echo "Documentation Markdown files generated for Docusaurus."
 
 %.md: FULLNAME = $(basename $@)
 %.md: NAME = $(basename $(FULLNAME))
@@ -16,9 +17,22 @@ docs: $(DOCTARGETS)
 %.md: DEST = content/models/$(FULLNAME).md
 %.md:
 	@echo "--- generating "$@" from "$(PROTO)"..."
-	protoc -I $(REPOROOT) \
-		--doc_out=content/models --doc_opt=./model.tmpl,$(FULLNAME).body \
-		$(PROTO) $(SERVICES)
-	echo "---\ntitle: $(FULLNAME)\n---\n\n" > $(DEST)
-	cat content/models/$(FULLNAME).body >> $(DEST)
-	rm content/models/$(FULLNAME).body
+	go run generate_markdown.go -root $(REPOROOT) -in $(PROTO) -out $(DEST)
+
+.PHONY: start
+start:
+	@echo "Starting Docusaurus with version $(VERSION_TAG)"
+	@VERSION_TAG=$(VERSION_TAG) npx docusaurus start
+
+.PHONY: version
+version:
+	@echo "Creating new Docusaurus version from generated docs with tag $(VERSION_TAG)"
+	@VERSION_TAG=$(VERSION_TAG) npx docusaurus docs:version $(VERSION_TAG)
+	@echo "Stashing versioned docs to gh-pages"
+	@git checkout gh-pages
+	@git pull origin gh-pages
+	@mv docs/versioned_docs docs/versioned_sidebars docs/versions.json .
+	@git add versioned_docs versioned_sidebars versions.json
+	@git commit -m "Add Docusaurus version $(VERSION_TAG)"
+	@git push origin gh-pages
+	@git checkout trunk

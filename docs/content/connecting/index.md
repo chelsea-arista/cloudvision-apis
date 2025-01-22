@@ -1,7 +1,5 @@
 ---
-title: Connecting
-weight: 3
-chapter: false
+title: "Connecting"
 ---
 
 The port used to connect to CVP is 443 for both on-prem and cloud deployments.
@@ -22,9 +20,9 @@ The following are the cluster URLs used in production:
 | Australia | `www.cv-prod-ausoutheast-1.arista.io` |
 | United Kingdon | `www.cv-prod-uk-1.arista.io` |
 
-{{% notice warning %}}
+:::warning
 URLs without `www` are not supported.
-{{% /notice %}}
+:::
 
 ## Authentication
 
@@ -58,9 +56,9 @@ The steps to create a service account token are (both CV on-prem and CVaaS):
 
     ![service account 4](./static/svc_account4.png)
 
-{{% notice note %}}
+:::note
 The service account token will not be retreivable after clicking Ok. It is recommended to store it somewhere safe.
-{{% /notice %}}
+:::
 
 Read on if you are interested in generating a short lived token for CloudVision on-prem using the HTTP login API.
 
