@@ -80,6 +80,12 @@ jobs:
       working-directory: docs
       run: make version
 
+    - name: Ensure version files exist
+      run: |
+        if [ ! -f docs/versions.json ]; then echo '[]' > docs/versions.json; fi
+        if [ ! -f docs/versioned.json ]; then echo '{}' > docs/versioned.json; fi
+      working-directory: docs
+
     - name: Build Docusaurus Site
       working-directory: docs
       run: npx docusaurus build
@@ -87,7 +93,7 @@ jobs:
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./docs/build
-          clean: false
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: ./docs/build
+        keep_files: true
