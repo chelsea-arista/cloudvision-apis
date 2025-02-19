@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - trunk
+    - stable
 
 jobs:
   build-deploy:
@@ -84,9 +85,9 @@ jobs:
       working-directory: docs
       run: npx docusaurus build
 
-    - name: Deploy to GitHub Pages
+    - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
-      with:
+      env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./docs/build
