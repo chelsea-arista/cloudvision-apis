@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
       with:
         submodules: true
         fetch-depth: 0
@@ -48,33 +48,12 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
 
-    - name: Determine new version tag
-      id: get_version
-      run: |
-        LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
-        echo "Latest tag: $LATEST_TAG"
-        if [ -z "$LATEST_TAG" ]; then
-          NEW_TAG="v1.0.0"
-        else
-          MAJOR=$(echo "$LATEST_TAG" | sed -E 's/^v([0-9]+)\..*/\1/')
-          NEW_MAJOR=$((MAJOR+1))
-          NEW_TAG="v${NEW_MAJOR}.0.0"
-        fi
-        echo "New tag: $NEW_TAG"
-        echo "::set-output name=new_tag::$NEW_TAG"
-
-    - name: Create and push new tag
-      run: |
-        NEW_TAG=${{ steps.get_version.outputs.new_tag }}
-        echo "Creating tag $NEW_TAG"
-        git tag -a "$NEW_TAG" -m "Version $NEW_TAG"
-        git push origin "$NEW_TAG"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Generate Docs
       working-directory: docs
       run: make
+
+    - name: Ensure docs directory exists
+      run: mkdir -p docs
 
     - name: Generate Versioned Docs
       working-directory: docs
@@ -83,13 +62,12 @@ jobs:
     - name: Ensure version files exist
       run: |
         mkdir -p docs
-        if [ ! -f docs/versions.json ]; then echo '[]' > docs/versions.json; fi
-        if [ ! -f docs/versioned.json ]; then echo '{}' > docs/versioned.json; fi
+        test -f docs/versions.json || echo '[]' > docs/versions.json
+        test -f docs/versioned.json || echo '{}' > docs/versioned.json
         ls -l docs/
 
-    - name: Build Docusaurus Site
-      working-directory: docs
-      run: npx docusaurus build
+    - name: Copy versions.json to build directory
+      run: cp docs/versions.json docs/versioned.json docs/build/
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
