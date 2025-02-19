@@ -28,3 +28,5 @@ start:
 version:
 	@echo "Creating new Docusaurus version from generated docs with tag $(VERSION_TAG)"
 	@VERSION_TAG=$(VERSION_TAG) npx docusaurus docs:version $(VERSION_TAG)
+	@echo "Ensuring versions.json is up to date"
+	@if [ -f "versions.json" ]; then cp versions.json docs/build/; fi
