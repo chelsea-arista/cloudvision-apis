@@ -29,5 +29,5 @@ version:
 	@echo "Creating new Docusaurus version from generated docs with tag $(VERSION_TAG)"
 	@VERSION_TAG=$(VERSION_TAG) npx docusaurus docs:version $(VERSION_TAG)
 	@echo "Ensuring versions.json exists"
-	@test -f versions.json || echo '[]' > versions.json
-	@jq --arg v "$(VERSION_TAG)" '. + [$v]' versions.json > versions.json.tmp && mv versions.json.tmp versions.json
+	@test -f docs/versions.json || echo '[]' > docs/versions.json
+	@jq --arg v "$(VERSION_TAG)" '. + [$v]' docs/versions.json > docs/versions.json.tmp && mv docs/versions.json.tmp docs/versions.json

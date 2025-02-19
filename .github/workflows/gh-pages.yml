@@ -85,6 +85,7 @@ jobs:
         mkdir -p docs
         if [ ! -f docs/versions.json ]; then echo '[]' > docs/versions.json; fi
         if [ ! -f docs/versioned.json ]; then echo '{}' > docs/versioned.json; fi
+        ls -l docs/
 
     - name: Build Docusaurus Site
       working-directory: docs
