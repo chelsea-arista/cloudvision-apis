@@ -90,10 +90,17 @@ jobs:
         cp -r docs/versioned_docs docs/build/ || true
         ls -l docs/build/
 
+    - name: Force add versions.json to commit
+      run: |
+        cd docs/build
+        git init
+        git add versions.json versioned_docs
+        git commit -m "Ensure versions.json is deployed"
+
     - name: Build Docusaurus Site
       working-directory: docs
       run: npx docusaurus build
-
+    
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
