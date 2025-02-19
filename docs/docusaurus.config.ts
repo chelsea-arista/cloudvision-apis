@@ -40,7 +40,6 @@ const config: Config = {
           editUrl:
             'https://github.com/aristanetworks/cloudvision-apis/edit/main/docs/',
           routeBasePath: 'docs',
-          includeCurrentVersion: true,
           lastVersion: 'current',
           versions: {
             current: {

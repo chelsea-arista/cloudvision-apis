@@ -28,11 +28,3 @@ start:
 version:
 	@echo "Creating new Docusaurus version from generated docs with tag $(VERSION_TAG)"
 	@VERSION_TAG=$(VERSION_TAG) npx docusaurus docs:version $(VERSION_TAG)
-	@echo "Stashing versioned docs to gh-pages"
-	@git checkout gh-pages
-	@git pull origin gh-pages
-	@mv docs/versioned_docs docs/versioned_sidebars docs/versions.json .
-	@git add versioned_docs versioned_sidebars versions.json
-	@git commit -m "Add Docusaurus version $(VERSION_TAG)"
-	@git push origin gh-pages
-	@git checkout trunk
