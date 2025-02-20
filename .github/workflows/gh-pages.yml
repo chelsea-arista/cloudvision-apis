@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - trunk
+      - stable
 
 jobs:
   build-deploy:
