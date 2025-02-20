@@ -76,34 +76,32 @@ jobs:
       working-directory: docs
       run: make
 
-    - name: Ensure docs directory exists
-      run: mkdir -p docs
-
     - name: Generate Versioned Docs
       working-directory: docs
       run: make version
 
-    - name: Copy version files to build directory
-      run: |
-        mkdir -p docs/build
-        cp docs/versions.json docs/build/ || true
-        cp -r docs/versioned_docs docs/build/ || true
-        ls -l docs/build/
-
-    - name: Force add versions.json to commit
-      run: |
-        cd docs/build
-        git init
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git add versions.json versioned_docs
-        git status
-        git commit -m "Ensure versions.json is deployed"
-
     - name: Build Docusaurus Site
       working-directory: docs
       run: npx docusaurus build
-    
+
+    - name: Update version files in gh-pages branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp
+        cd gh-pages-temp
+        cp ../docs/versions.json .
+        cp -r ../docs/versioned_docs .
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        if ! git diff --cached --quiet; then
+          git commit -m "Update version files from build"
+          git push origin gh-pages
+        else
+          echo "No version file changes."
+        fi
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
