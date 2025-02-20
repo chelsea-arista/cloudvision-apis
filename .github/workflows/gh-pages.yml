@@ -3,8 +3,7 @@ name: github pages
 on:
   push:
     branches:
-    - trunk
-    - stable
+      - trunk
 
 jobs:
   build-deploy:
@@ -91,8 +90,19 @@ jobs:
       run: |
         git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp
         cd gh-pages-temp
-        cp ../docs/versions.json .
-        cp -r ../docs/versioned_docs .
+
+        if [ -f versions.json ]; then
+          echo "Merging versions.json..."
+          jq -s 'add | unique' versions.json ../docs/versions.json > tmp.json && mv tmp.json versions.json
+        else
+          cp ../docs/versions.json .
+        fi
+
+        if [ -d ../docs/versioned_docs ]; then
+          mkdir -p versioned_docs
+          cp -r ../docs/versioned_docs/* versioned_docs/
+        fi
+
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add .
