@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - trunk
-      - stable
 
 jobs:
   build-deploy:
@@ -73,6 +72,23 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Retrieve previous version files from gh-pages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp || echo "gh-pages branch not found"
+        if [ -d gh-pages-temp ]; then
+          if [ -f gh-pages-temp/versions.json ]; then
+            cp gh-pages-temp/versions.json docs/
+          fi
+          if [ -d gh-pages-temp/versioned_docs ]; then
+            cp -r gh-pages-temp/versioned_docs docs/
+          fi
+          if [ -d gh-pages-temp/versioned_sidebars ]; then
+            cp -r gh-pages-temp/versioned_sidebars docs/
+          fi
+        fi
+
     - name: Generate Docs
       working-directory: docs
       run: make
@@ -89,21 +105,22 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp
+        git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp || mkdir gh-pages-temp && cd gh-pages-temp && git init && git checkout -b gh-pages && cd ..
         cd gh-pages-temp
-
         if [ -f versions.json ]; then
           echo "Merging versions.json..."
           jq -s 'add | unique' versions.json ../docs/versions.json > tmp.json && mv tmp.json versions.json
         else
           cp ../docs/versions.json .
         fi
-
         if [ -d ../docs/versioned_docs ]; then
           mkdir -p versioned_docs
           cp -r ../docs/versioned_docs/* versioned_docs/
         fi
-
+        if [ -d ../docs/versioned_sidebars ]; then
+          mkdir -p versioned_sidebars
+          cp -r ../docs/versioned_sidebars/* versioned_sidebars/
+        fi
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add .
