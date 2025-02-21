@@ -51,23 +51,25 @@ jobs:
         REF_TYPE="${{ github.ref_type }}"
         echo "::set-output name=ref_name::$REF_NAME"
         echo "::set-output name=ref_type::$REF_TYPE"
-
+        
     - name: Retrieve previous version files from gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
           if ! git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp; then
-            echo "Error: gh-pages branch not found!"
+            echo "Error: gh-pages branch not found! This workflow requires gh-pages to exist."
             exit 1
           fi
           if [ -f gh-pages-temp/versions.json ]; then
             cp gh-pages-temp/versions.json docs/
           fi
           if [ -d gh-pages-temp/versioned_docs ]; then
-            cp -r gh-pages-temp/versioned_docs docs/
+            mkdir -p docs/versioned_docs
+            cp -r gh-pages-temp/versioned_docs/* docs/versioned_docs/
           fi
           if [ -d gh-pages-temp/versioned_sidebars ]; then
-            cp -r gh-pages-temp/versioned_sidebars docs/
+            mkdir -p docs/versioned_sidebars
+            cp -r gh-pages-temp/versioned_sidebars/* docs/versioned_sidebars/
           fi
 
     - name: Generate Docs
