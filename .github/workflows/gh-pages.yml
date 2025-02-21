@@ -39,12 +39,16 @@ jobs:
       working-directory: docs/content
       run: mkdir -p models
 
+    - name: Setup Git config
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+
     - name: Determine version information
       id: get_version
       run: |
         REF_NAME="${{ github.ref_name }}"
         REF_TYPE="${{ github.ref_type }}"
-        echo "Running on ref: $REF_NAME (type: $REF_TYPE)"
         echo "::set-output name=ref_name::$REF_NAME"
         echo "::set-output name=ref_type::$REF_TYPE"
 
@@ -53,7 +57,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
           if ! git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp; then
-            echo "Error: gh-pages branch not found! This workflow requires gh-pages to exist."
+            echo "Error: gh-pages branch not found!"
             exit 1
           fi
           if [ -f gh-pages-temp/versions.json ]; then
@@ -82,23 +86,23 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: gh-pages
+        path: gh-pages
         fetch-depth: 0
 
     - name: Update version files in gh-pages branch
       run: |
-        cp ../docs/versions.json versions.json
-        if [ -d ../docs/versioned_docs ]; then
-          mkdir -p versioned_docs
-          cp -r ../docs/versioned_docs/* versioned_docs/
+        cp docs/versions.json gh-pages/versions.json
+        if [ -d docs/versioned_docs ]; then
+          mkdir -p gh-pages/versioned_docs
+          cp -r docs/versioned_docs/* gh-pages/versioned_docs/
         fi
-        if [ -d ../docs/versioned_sidebars ]; then
-          mkdir -p versioned_sidebars
-          cp -r ../docs/versioned_sidebars/* versioned_sidebars/
+        if [ -d docs/versioned_sidebars ]; then
+          mkdir -p gh-pages/versioned_sidebars
+          cp -r docs/versioned_sidebars/* gh-pages/versioned_sidebars/
         fi
-
+        cd gh-pages
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
-
         git add .
         if ! git diff --cached --quiet; then
           TAG_NAME="${{ github.ref_name }}"
