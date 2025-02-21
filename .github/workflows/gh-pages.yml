@@ -48,74 +48,40 @@ jobs:
     - name: Determine version information
       id: get_version
       run: |
-        REF_NAME="${{ github.ref_name }}"
-        REF_TYPE="${{ github.ref_type }}"
-        echo "::set-output name=ref_name::$REF_NAME"
-        echo "::set-output name=ref_type::$REF_TYPE"
+        echo "::set-output name=ref_name::${{ github.ref_name }}"
+        echo "::set-output name=ref_type::${{ github.ref_type }}"
 
     - name: Retrieve previous version files from gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-          if ! git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp; then
-            echo "Error: gh-pages branch not found!"
-            exit 1
-          fi
-          if [ -f gh-pages-temp/versions.json ]; then
-            cp gh-pages-temp/versions.json docs/
-          fi
-          if [ -d gh-pages-temp/versioned_docs ]; then
-            cp -r gh-pages-temp/versioned_docs docs/
-          fi
-          if [ -d gh-pages-temp/versioned_sidebars ]; then
-            cp -r gh-pages-temp/versioned_sidebars docs/
-          fi
+        if ! git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp; then
+          echo "Error: gh-pages branch not found!"
+          exit 1
+        fi
+        if [ -f gh-pages-temp/versions.json ]; then
+          cp gh-pages-temp/versions.json docs/
+        fi
+        if [ -d gh-pages-temp/versioned_docs ]; then
+          cp -r gh-pages-temp/versioned_docs docs/
+        fi
+        if [ -d gh-pages-temp/versioned_sidebars ]; then
+          cp -r gh-pages-temp/versioned_sidebars docs/
+        fi
 
     - name: Generate Docs
       working-directory: docs
       run: make
 
     - name: Generate Versioned Docs
+      if: steps.get_version.outputs.ref_type == 'tag'
       working-directory: docs
-      run: make version
+      run: |
+        make version
 
     - name: Build Docusaurus Site
       working-directory: docs
       run: npx docusaurus build
-
-    - name: Checkout gh-pages branch
-      uses: actions/checkout@v4
-      with:
-        ref: gh-pages
-        path: gh-pages
-        fetch-depth: 0
-
-    - name: Update version files in gh-pages branch
-      run: |
-        if [ -f gh-pages/versions.json ]; then
-          jq -s 'add | unique' gh-pages/versions.json docs/versions.json > gh-pages/tmp.json && mv gh-pages/tmp.json gh-pages/versions.json
-        else
-          cp docs/versions.json gh-pages/versions.json
-        fi
-        if [ -d docs/versioned_docs ]; then
-          mkdir -p gh-pages/versioned_docs
-          cp -r docs/versioned_docs/* gh-pages/versioned_docs/
-        fi
-        if [ -d docs/versioned_sidebars ]; then
-          mkdir -p gh-pages/versioned_sidebars
-          cp -r docs/versioned_sidebars/* gh-pages/versioned_sidebars/
-        fi
-        cd gh-pages
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git add .
-        if ! git diff --cached --quiet; then
-          TAG_NAME="${{ github.ref_name }}"
-          COMMIT_HASH=$(git rev-parse --short HEAD)
-          git commit -m "Update version files from build for ${TAG_NAME} (${COMMIT_HASH})"
-        else
-          echo "No version file changes."
-        fi
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
