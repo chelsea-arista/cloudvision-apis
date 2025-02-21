@@ -116,3 +116,27 @@ code {
 #TableOfContents {
     max-height: fit-content;
 }
+
+.navbar {
+    background-color: #27569b !important;
+    color: white !important;
+}
+
+.footer {
+    background-color: #27569b;
+}
+
+.highlight-item {
+    font-weight: bold
+}
+
+.theme-doc-version-badge {
+    display: none;
+}
+
+html[data-theme='dark'] code {
+    background-color: #444 !important;
+    color: #e6e6e6 !important;
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
