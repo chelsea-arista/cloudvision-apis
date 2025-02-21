@@ -4,17 +4,16 @@ on:
   push:
     branches:
       - trunk
-      - stable
+    tags:
+      - '**'
 
 jobs:
   build-deploy:
     runs-on: ubuntu-20.04
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@master
+    - uses: actions/checkout@master
       with:
         submodules: true
-        fetch-depth: 0
 
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -24,10 +23,10 @@ jobs:
     - name: Install Protoc
       uses: arduino/setup-protoc@master
 
-    - name: Setup Go
-      uses: actions/setup-go@v2
+    - name: Install Latest Golang
+      uses: actions/setup-go@v4
       with:
-        go-version: '^1.17.6'
+        go-version: 'stable'
 
     - name: Install protoc-gen-doc
       run: go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
@@ -39,10 +38,6 @@ jobs:
     - name: Create directory
       working-directory: docs/content
       run: mkdir -p models
-
-    - name: Build generate_versions tool
-      working-directory: docs
-      run: go build -o generate_markdown generate_markdown.go
 
     - name: Setup Git config
       run: |
