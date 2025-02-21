@@ -11,7 +11,8 @@ jobs:
   build-deploy:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@master
+    - name: Checkout repository
+      uses: actions/checkout@master
       with:
         submodules: true
 
@@ -51,25 +52,23 @@ jobs:
         REF_TYPE="${{ github.ref_type }}"
         echo "::set-output name=ref_name::$REF_NAME"
         echo "::set-output name=ref_type::$REF_TYPE"
-        
+
     - name: Retrieve previous version files from gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
           if ! git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp; then
-            echo "Error: gh-pages branch not found! This workflow requires gh-pages to exist."
+            echo "Error: gh-pages branch not found!"
             exit 1
           fi
           if [ -f gh-pages-temp/versions.json ]; then
             cp gh-pages-temp/versions.json docs/
           fi
           if [ -d gh-pages-temp/versioned_docs ]; then
-            mkdir -p docs/versioned_docs
-            cp -r gh-pages-temp/versioned_docs/* docs/versioned_docs/
+            cp -r gh-pages-temp/versioned_docs docs/
           fi
           if [ -d gh-pages-temp/versioned_sidebars ]; then
-            mkdir -p docs/versioned_sidebars
-            cp -r gh-pages-temp/versioned_sidebars/* docs/versioned_sidebars/
+            cp -r gh-pages-temp/versioned_sidebars docs/
           fi
 
     - name: Generate Docs
@@ -93,7 +92,11 @@ jobs:
 
     - name: Update version files in gh-pages branch
       run: |
-        cp docs/versions.json gh-pages/versions.json
+        if [ -f gh-pages/versions.json ]; then
+          jq -s 'add | unique' gh-pages/versions.json docs/versions.json > gh-pages/tmp.json && mv gh-pages/tmp.json gh-pages/versions.json
+        else
+          cp docs/versions.json gh-pages/versions.json
+        fi
         if [ -d docs/versioned_docs ]; then
           mkdir -p gh-pages/versioned_docs
           cp -r docs/versioned_docs/* gh-pages/versioned_docs/
