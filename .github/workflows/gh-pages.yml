@@ -39,41 +39,23 @@ jobs:
       working-directory: docs/content
       run: mkdir -p models
 
-    - name: Setup Git config
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-
-    - name: Determine new version tag
+    - name: Determine version information
       id: get_version
       run: |
-        LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
-        echo "Latest tag: $LATEST_TAG"
-        if [ -z "$LATEST_TAG" ]; then
-          NEW_TAG="v1.0.0"
-        else
-          MAJOR=$(echo "$LATEST_TAG" | sed -E 's/^v([0-9]+)\..*/\1/')
-          NEW_MAJOR=$((MAJOR+1))
-          NEW_TAG="v${NEW_MAJOR}.0.0"
-        fi
-        echo "New tag: $NEW_TAG"
-        echo "::set-output name=new_tag::$NEW_TAG"
-
-    - name: Create and push new tag
-      run: |
-        NEW_TAG=${{ steps.get_version.outputs.new_tag }}
-        echo "Creating tag $NEW_TAG"
-        git tag -a "$NEW_TAG" -m "Version $NEW_TAG"
-        git push origin "$NEW_TAG"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REF_NAME="${{ github.ref_name }}"
+        REF_TYPE="${{ github.ref_type }}"
+        echo "Running on ref: $REF_NAME (type: $REF_TYPE)"
+        echo "::set-output name=ref_name::$REF_NAME"
+        echo "::set-output name=ref_type::$REF_TYPE"
 
     - name: Retrieve previous version files from gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp || echo "gh-pages branch not found"
-        if [ -d gh-pages-temp ]; then
+          if ! git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp; then
+            echo "Error: gh-pages branch not found! This workflow requires gh-pages to exist."
+            exit 1
+          fi
           if [ -f gh-pages-temp/versions.json ]; then
             cp gh-pages-temp/versions.json docs/
           fi
@@ -83,7 +65,6 @@ jobs:
           if [ -d gh-pages-temp/versioned_sidebars ]; then
             cp -r gh-pages-temp/versioned_sidebars docs/
           fi
-        fi
 
     - name: Generate Docs
       working-directory: docs
@@ -97,18 +78,15 @@ jobs:
       working-directory: docs
       run: npx docusaurus build
 
+    - name: Checkout gh-pages branch
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        fetch-depth: 0
+
     - name: Update version files in gh-pages branch
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git clone --branch gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} gh-pages-temp || mkdir gh-pages-temp && cd gh-pages-temp && git init && git checkout -b gh-pages && cd ..
-        cd gh-pages-temp
-        if [ -f versions.json ]; then
-          echo "Merging versions.json..."
-          jq -s 'add | unique' versions.json ../docs/versions.json > tmp.json && mv tmp.json versions.json
-        else
-          cp ../docs/versions.json .
-        fi
+        cp ../docs/versions.json versions.json
         if [ -d ../docs/versioned_docs ]; then
           mkdir -p versioned_docs
           cp -r ../docs/versioned_docs/* versioned_docs/
@@ -117,12 +95,15 @@ jobs:
           mkdir -p versioned_sidebars
           cp -r ../docs/versioned_sidebars/* versioned_sidebars/
         fi
+
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
+
         git add .
         if ! git diff --cached --quiet; then
-          git commit -m "Update version files from build"
-          git push origin gh-pages
+          TAG_NAME="${{ github.ref_name }}"
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          git commit -m "Update version files from build for ${TAG_NAME} (${COMMIT_HASH})"
         else
           echo "No version file changes."
         fi
