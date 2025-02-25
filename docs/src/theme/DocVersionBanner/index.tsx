@@ -3,7 +3,7 @@ import type {WrapperProps} from '@docusaurus/types';
 
 export default function DocVersionBannerWrapper(props: WrapperProps<any>) {
   const {version} = props;
-  if (version.name === 'Trunk') {
+  if (version.name === 'current') {
     return null;
   }
   return (
