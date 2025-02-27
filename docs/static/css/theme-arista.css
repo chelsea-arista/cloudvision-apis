@@ -140,3 +140,25 @@ html[data-theme='dark'] code {
     border-radius: 4px;
     padding: 2px 4px;
   }
+
+html[data-theme='dark'] p {
+    color: #cdc9c9 !important;
+}
+
+html[data-theme='dark'] h1,
+html[data-theme='dark'] h2,
+html[data-theme='dark'] h3,
+html[data-theme='dark'] h4,
+html[data-theme='dark'] h5,
+html[data-theme='dark'] h6 {
+  color: #f3eeee !important; 
+}
+
+
+html[data-theme='dark'] li {
+  color: #819dc4 !important;
+}
+
+html[data-theme='dark'] table {
+    color: #cdc9c9 !important;
+  }
