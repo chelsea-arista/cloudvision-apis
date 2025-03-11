@@ -37,8 +37,6 @@ const config: Config = {
         docs: {
           path: 'content',
           sidebarPath: require.resolve('./sidebars.ts'),
-          editUrl:
-            'https://github.com/aristanetworks/cloudvision-apis/edit/main/docs/',
           routeBasePath: 'docs',
           lastVersion: 'current',
           versions: {

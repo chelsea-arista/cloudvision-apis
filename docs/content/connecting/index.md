@@ -42,7 +42,7 @@ The steps to create a service account token are (both CV on-prem and CVaaS):
 
 1. Go to Settings
 2. Go to Access Control - Service Accounts
-3. Create a Service account if there isn't one by clicking on the `+ New Service Account button`
+3. Create a Service account if there isn't one by clicking on the `+ New Service Account` button
 
     ![service account 1](./static/svc_account1.png)
 

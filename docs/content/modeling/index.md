@@ -73,7 +73,7 @@ A list of the available wrapper types can be seen [here](https://developers.goog
 
 ## Keys
 
-All models (whether config or state) contain a _key_ message.
+All models (except unkeyed models) contain a _key_ message.
 
 This key contains the minimal set of data needed to uniquely identify a given model entity. Model keys may be as simple as a single string (say, a name) or as complex as containing references to a datacenter, device, interface, or any combination of them. The complexity of the key depends entirely on the model at hand.
 
