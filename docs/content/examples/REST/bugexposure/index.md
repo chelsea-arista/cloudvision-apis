@@ -170,7 +170,7 @@ curl -sS -kX POST --header 'Accept: application/json' -b access_token=`cat token
 Output:
 
 
-```
+```json
 [
   {
     "value": {

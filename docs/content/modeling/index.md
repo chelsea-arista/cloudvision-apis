@@ -55,7 +55,7 @@ To make partial updates (both by users into the system as well as updates from t
 
 For example:
 
-```proto
+```protobuf
 message Nullability {
     // This value will contain "" when not set by the user/system.
     // It is not possible to know whether "" is the intended value, or simply omitted.

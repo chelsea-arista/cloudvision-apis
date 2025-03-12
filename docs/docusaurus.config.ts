@@ -17,7 +17,6 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
   plugins: [
     async function customPlugin(context, options) {
       return {
@@ -29,7 +28,6 @@ const config: Config = {
       };
     },
   ],
-
   presets: [
     [
       'classic',
@@ -58,6 +56,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.oneLight,
       darkTheme: prismThemes.oneDark,
+      additionalLanguages: ["protobuf", "bash",],
     },
     navbar: {
       hideOnScroll: true,
@@ -68,12 +67,6 @@ const config: Config = {
         height: 32,
       },
       items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'mainSidebar',
-          position: 'left',
-          label: 'CloudVision APIs',
-        },
         {
           type: 'docsVersionDropdown',
           position: 'right',

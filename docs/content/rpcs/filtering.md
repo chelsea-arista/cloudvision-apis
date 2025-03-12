@@ -29,7 +29,7 @@ Models are allowed to also contain an "implementation specific" filter which can
 
 This filter type will be defined in the protobuf definition. This type should be well documented in the protobuf as well as generated documentation.
 
-```
+```protobuf
 message CustomFilteredStreamRequest {
   ...
 
