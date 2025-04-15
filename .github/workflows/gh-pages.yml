@@ -13,8 +13,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@master
-      with:
-        submodules: true
 
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -24,7 +22,7 @@ jobs:
     - name: Install Protoc
       uses: arduino/setup-protoc@master
 
-    - name: Setup Go
+    - name: Install Golang (for protoc-gen-doc)
       uses: actions/setup-go@v4
       with:
         go-version: 'stable'
@@ -35,11 +33,6 @@ jobs:
     - name: Install dependencies
       working-directory: docs
       run: npm install
-
-    - name: Create directory
-      working-directory: docs/content
-      run: mkdir -p models
-
 
     - name: Checkout gh-pages branch
       uses: actions/checkout@v4

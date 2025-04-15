@@ -1,7 +1,7 @@
-REPOROOT=../
+REPOROOT=..
 PROTODIRS=$(shell find $(REPOROOT)/arista -name "*.v*" -type d -exec basename {} \;)
 DOCTARGETS=$(patsubst %,%.md,$(PROTODIRS))
-VERSION_TAG=$(shell git describe --tags --abbrev=0 2>/dev/null || echo "latest")
+VERSION_TAG=$(shell git tag -l | tr -d '\n')
 
 .PHONY: default
 default: docs
@@ -17,6 +17,7 @@ docs: $(DOCTARGETS)
 %.md: DEST = content/models/$(FULLNAME).md
 %.md:
 	@echo "--- generating "$@" from "$(PROTO)"..."
+	@mkdir -p $(dir $(DEST))
 	go run generate_markdown.go -root $(REPOROOT) -in $(PROTO) -out $(DEST)
 
 .PHONY: start
@@ -26,5 +27,5 @@ start:
 
 .PHONY: version
 version:
-	@echo "Creating new Docusaurus version from generated docs with tag $(VERSION_TAG)"
-	@VERSION_TAG=$(VERSION_TAG) npx docusaurus docs:version $(VERSION_TAG)
+	@echo "Creating new Docusaurus versions from tags: $(VERSION_TAG)"
+	@echo $(VERSION_TAG) | xargs -t -d ' ' -I {} npx docusaurus docs:version {}
