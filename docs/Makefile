@@ -1,4 +1,4 @@
-REPOROOT=../
+REPOROOT=..
 PROTODIRS=$(shell find $(REPOROOT)/arista -name "*.v*" -type d -exec basename {} \;)
 DOCTARGETS=$(patsubst %,%.md,$(PROTODIRS))
 VERSION_TAG=$(shell git tag -l | tr -d '\n')
