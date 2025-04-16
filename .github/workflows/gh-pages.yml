@@ -34,6 +34,10 @@ jobs:
       working-directory: docs
       run: npm install
 
+    - name: Create directory
+      working-directory: docs/content
+      run: mkdir -p models
+
     - name: Checkout gh-pages branch
       uses: actions/checkout@v4
       with:

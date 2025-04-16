@@ -17,7 +17,6 @@ docs: $(DOCTARGETS)
 %.md: DEST = content/models/$(FULLNAME).md
 %.md:
 	@echo "--- generating "$@" from "$(PROTO)"..."
-	@mkdir -p $(dir $(DEST))
 	go run generate_markdown.go -root $(REPOROOT) -in $(PROTO) -out $(DEST)
 
 .PHONY: start
