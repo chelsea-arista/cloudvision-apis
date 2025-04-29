@@ -12,10 +12,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout repository
-      uses: actions/checkout@master
+      uses: actions/checkout@v4
       with:
-        fetch-tags: true
-
+        fetch-depth: 0
+    - name: Fetch tags mabually
+      run: git fetch --tags
+        
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
