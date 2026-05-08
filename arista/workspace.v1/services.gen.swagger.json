@@ -2323,7 +2323,7 @@
           },
           {
             "name": "key.entityType",
-            "description": "entity_type is the type of entity being compared.\n\n - ENTITY_TYPE_UNSPECIFIED: ENTITY_TYPE_UNSPECIFIED indicates an unspecified entity type.\n - ENTITY_TYPE_STUDIO: ENTITY_TYPE_STUDIO indicates the Studio entity type.\n - ENTITY_TYPE_INPUTS: ENTITY_TYPE_INPUTS indicates the Inputs entity type.\n - ENTITY_TYPE_ASSIGNED_TAGS: ENTITY_TYPE_ASSIGNED_TAGS indicates the AssignedTags entity type.\n - ENTITY_TYPE_BUILD_HOOK: ENTITY_TYPE_BUILD_HOOK indicates the BuildHook entity type.\n - ENTITY_TYPE_AUTOFILL_ACTION: ENTITY_TYPE_AUTOFILL_ACTION indicates the AutofillAction entity type.\n - ENTITY_TYPE_CONFIGLET: ENTITY_TYPE_CONFIGLET indicates the Configlet entity type for\nstatic configuration studio.\n - ENTITY_TYPE_CONFIGLET_ASSIGNMENT: ENTITY_TYPE_CONFIGLET_ASSIGNMENT indicates the ConfigletAssignment\nentity type for static configuration studio.\n - ENTITY_TYPE_TAG: ENTITY_TYPE_TAG indicates the tags entity type.\n - ENTITY_TYPE_TAG_ASSIGNMENT: ENTITY_TYPE_TAG_ASSIGNMENT indicates the tag assignment entity type.",
+            "description": "entity_type is the type of entity being compared.\n\n - ENTITY_TYPE_UNSPECIFIED: ENTITY_TYPE_UNSPECIFIED indicates an unspecified entity type.\n - ENTITY_TYPE_STUDIO: ENTITY_TYPE_STUDIO indicates the Studio entity type.\n - ENTITY_TYPE_INPUTS: ENTITY_TYPE_INPUTS indicates the Inputs entity type.\n - ENTITY_TYPE_ASSIGNED_TAGS: ENTITY_TYPE_ASSIGNED_TAGS indicates the AssignedTags entity type.\n - ENTITY_TYPE_BUILD_HOOK: ENTITY_TYPE_BUILD_HOOK indicates the BuildHook entity type.\n - ENTITY_TYPE_AUTOFILL_ACTION: ENTITY_TYPE_AUTOFILL_ACTION indicates the AutofillAction entity type.\n - ENTITY_TYPE_CONFIGLET: ENTITY_TYPE_CONFIGLET indicates the Configlet entity type for\nstatic configuration studio.\n - ENTITY_TYPE_CONFIGLET_ASSIGNMENT: ENTITY_TYPE_CONFIGLET_ASSIGNMENT indicates the ConfigletAssignment\nentity type for static configuration studio.\n - ENTITY_TYPE_TAG: ENTITY_TYPE_TAG indicates the tags entity type.\n - ENTITY_TYPE_TAG_ASSIGNMENT: ENTITY_TYPE_TAG_ASSIGNMENT indicates the tag assignment entity type.\n - ENTITY_TYPE_FIXTURE_INSTANCE: ENTITY_TYPE_FIXTURE_INSTANCE indicates the FixtureInstance entity type.\n - ENTITY_TYPE_FIXTURE_CLASS: ENTITY_TYPE_FIXTURE_CLASS indicates the FixtureClass entity type.\n - ENTITY_TYPE_PROCESSOR: ENTITY_TYPE_PROCESSOR indicates the Processor entity type.\n - ENTITY_TYPE_NODE: ENTITY_TYPE_NODE indicates the Node entity type.\n - ENTITY_TYPE_DEPENDENCIES: ENTITY_TYPE_DEPENDENCIES indicates the dependencies entity type.",
             "in": "query",
             "required": true,
             "type": "string",
@@ -2337,7 +2337,12 @@
               "ENTITY_TYPE_CONFIGLET",
               "ENTITY_TYPE_CONFIGLET_ASSIGNMENT",
               "ENTITY_TYPE_TAG",
-              "ENTITY_TYPE_TAG_ASSIGNMENT"
+              "ENTITY_TYPE_TAG_ASSIGNMENT",
+              "ENTITY_TYPE_FIXTURE_INSTANCE",
+              "ENTITY_TYPE_FIXTURE_CLASS",
+              "ENTITY_TYPE_PROCESSOR",
+              "ENTITY_TYPE_NODE",
+              "ENTITY_TYPE_DEPENDENCIES"
             ],
             "default": "ENTITY_TYPE_UNSPECIFIED"
           },
@@ -3357,7 +3362,7 @@
           "description": "configlet_name represents the originating configlet name. Configlet_name\nand line_num point to the line where config warning or config error originate."
         }
       },
-      "title": "ConfigError represents errors reported by CVP when handling device configuration"
+      "title": "ConfigError represents errors reported by CVP/EOS when handling device configuration"
     },
     "arista.configstatus.v1.ConfigErrors": {
       "type": "object",
@@ -3504,10 +3509,11 @@
         "ERROR_CODE_DEVICE_ERROR",
         "ERROR_CODE_UNREACHABLE_DEVICE",
         "ERROR_CODE_CONFIG_FILTER_ERROR",
-        "ERROR_CODE_INTERNAL"
+        "ERROR_CODE_INTERNAL",
+        "ERROR_CODE_PROPOSED_CONFIG_CHECK"
       ],
       "default": "ERROR_CODE_UNSPECIFIED",
-      "description": "- ERROR_CODE_UNSPECIFIED: ERROR_CODE_UNSPECIFIED uninitialized value\n - ERROR_CODE_DEVICE_WARNING: ERROR_CODE_DEVICE_WARNING indicates device warning\n - ERROR_CODE_DEVICE_ERROR: ERROR_CODE_DEVICE_ERROR indicates device error\n - ERROR_CODE_UNREACHABLE_DEVICE: ERROR_CODE_UNREACHABLE_DEVICE indicates the device cannot be reached\n - ERROR_CODE_CONFIG_FILTER_ERROR: ERROR_CODE_CONFIG_FILTER_ERROR indicates error from partial config management filters\n - ERROR_CODE_INTERNAL: ERROR_CODE_INTERNAL indicates internal errors",
+      "description": "- ERROR_CODE_UNSPECIFIED: ERROR_CODE_UNSPECIFIED uninitialized value\n - ERROR_CODE_DEVICE_WARNING: ERROR_CODE_DEVICE_WARNING indicates device warning\n - ERROR_CODE_DEVICE_ERROR: ERROR_CODE_DEVICE_ERROR indicates device error\n - ERROR_CODE_UNREACHABLE_DEVICE: ERROR_CODE_UNREACHABLE_DEVICE indicates the device cannot be reached\n - ERROR_CODE_CONFIG_FILTER_ERROR: ERROR_CODE_CONFIG_FILTER_ERROR indicates error from partial config management filters\n - ERROR_CODE_INTERNAL: ERROR_CODE_INTERNAL indicates internal errors\n - ERROR_CODE_PROPOSED_CONFIG_CHECK: ERROR_CODE_PROPOSED_CONFIG_CHECK indicates an issue with the content of proposed configuration.",
       "title": "ErrorCode indicates warnings and errors produced during computing config"
     },
     "arista.imagestatus.v1.ComplianceStatus": {
@@ -3573,10 +3579,11 @@
         "ERROR_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE",
         "ERROR_CODE_DEVICE_EOS_2GB_INCOMPATIBLE",
         "ERROR_CODE_EOS_EXTENSION_VERSION_INCOMPATIBLE",
-        "ERROR_CODE_ARCH_UNSUPPORTED"
+        "ERROR_CODE_ARCH_UNSUPPORTED",
+        "ERROR_CODE_EOS_EXTENSION_ARCHITECTURE_INCOMPATIBLE"
       ],
       "default": "ERROR_CODE_UNSPECIFIED",
-      "description": "ErrorCode indicates errors produced during image validations.\n\n - ERROR_CODE_UNSPECIFIED: ERROR_CODE_UNSPECIFIED indicates error code is unspecified.\n - ERROR_CODE_SUPPORT_NOT_INTRODUCED: ERROR_CODE_SUPPORT_NOT_INTRODUCED represents case where the given EOS version does\nnot support the SKU.\nDeprecated - use ERROR_CODE_EOS_SUPPORT_NOT_INTRODUCED\n - ERROR_CODE_SUPPORT_REMOVED: ERROR_CODE_SUPPORT_REMOVED represents case where the given EOS version no longer\nsupports the SKU.\nDeprecated - use ERROR_CODE_EOS_SUPPORT_REMOVED\n - ERROR_CODE_DEVICE_UNREACHABLE: ERROR_CODE_DEVICE_UNREACHABLE represents the case where the device\nis unreachable during a compliance computation.\n - ERROR_CODE_VALIDATION_FAILED: ERROR_CODE_VALIDATION_FAILED represents case where the validations checks\nfailed.\n - ERROR_CODE_GET_PROPOSED_IMAGE_INFO_FAILED: ERROR_CODE_GET_PROPOSED_IMAGE_INFO_FAILED represents case where we are\nunable to get proposed image information for a device.\n - ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_ACTIVE_SUPERVISOR_FAILED: ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_ACTIVE_SUPERVISOR_FAILED represents case where we\nfail to get running image information from an active supervisor.\n - ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_PEER_SUPERVISOR_FAILED: ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_PEER_SUPERVISOR_FAILED represents case when we\nfail to get information from peer supervisor.\n - ERROR_CODE_EOS_TA_ARCHITECTURE_INCOMPATIBLE: ERROR_CODE_EOS_TA_ARCHITECTURE_INCOMPATIBLE represents the case where EOS architecture and\nTerminAttr architecture are incompatible.\n - ERROR_CODE_TA_CV_INCOMPATIBLE: ERROR_CODE_TA_CV_INCOMPATIBLE represents the case where TerminAttr is incompatible with\nCloudVision; i.e., the TerminAttr version is below CloudVision's minimum supported version.\n - ERROR_CODE_EOS_CV_INCOMPATIBLE: ERROR_CODE_EOS_CV_INCOMPATIBLE represents the case where EOS is not supported by CV.\nThe given EOS is below CV's minimum supported EOS version.\n - ERROR_CODE_EOS_SUPPORT_NOT_INTRODUCED: ERROR_CODE_EOS_SUPPORT_NOT_INTRODUCED represents the case where the given EOS version does\nnot support the SKU.\n - ERROR_CODE_EOS_SUPPORT_REMOVED: ERROR_CODE_EOS_SUPPORT_REMOVED represents the case where the given EOS version no longer\nsupports the SKU.\n - ERROR_CODE_PHYSICAL_DEVICE_EOS_INCOMPATIBLE: ERROR_CODE_PHYSICAL_DEVICE_EOS_INCOMPATIBLE represents the case where the physical device\ndoes not support the given EOS type.\n - ERROR_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE: ERROR_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE represents the case where the extension TerminAttr\nversion is lower than the embedded TerminAttr version in SWI.\n - ERROR_CODE_DEVICE_EOS_2GB_INCOMPATIBLE: ERROR_CODE_DEVICE_EOS_2GB_INCOMPATIBLE represents the case where a 2GB-device is incompatible\nwith a non-2GB EOS or a non-2GB device is incompatible with a 2GB-EOS.\n - ERROR_CODE_EOS_EXTENSION_VERSION_INCOMPATIBLE: ERROR_CODE_EOS_EXTENSION_VERSION_INCOMPATIBLE represents the case where the given extension\nversion doesn't support the given EOS version.\n - ERROR_CODE_ARCH_UNSUPPORTED: ERROR_CODE_ARCH_UNSUPPORTED represents the case where the given image architecture is not\nsupported by CloudVision."
+      "description": "ErrorCode indicates errors produced during image validations.\n\n - ERROR_CODE_UNSPECIFIED: ERROR_CODE_UNSPECIFIED indicates error code is unspecified.\n - ERROR_CODE_SUPPORT_NOT_INTRODUCED: ERROR_CODE_SUPPORT_NOT_INTRODUCED represents case where the given EOS version does\nnot support the SKU.\nDeprecated - use ERROR_CODE_EOS_SUPPORT_NOT_INTRODUCED\n - ERROR_CODE_SUPPORT_REMOVED: ERROR_CODE_SUPPORT_REMOVED represents case where the given EOS version no longer\nsupports the SKU.\nDeprecated - use ERROR_CODE_EOS_SUPPORT_REMOVED\n - ERROR_CODE_DEVICE_UNREACHABLE: ERROR_CODE_DEVICE_UNREACHABLE represents the case where the device\nis unreachable during a compliance computation.\n - ERROR_CODE_VALIDATION_FAILED: ERROR_CODE_VALIDATION_FAILED represents case where the validations checks\nfailed.\n - ERROR_CODE_GET_PROPOSED_IMAGE_INFO_FAILED: ERROR_CODE_GET_PROPOSED_IMAGE_INFO_FAILED represents case where we are\nunable to get proposed image information for a device.\n - ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_ACTIVE_SUPERVISOR_FAILED: ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_ACTIVE_SUPERVISOR_FAILED represents case where we\nfail to get running image information from an active supervisor.\n - ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_PEER_SUPERVISOR_FAILED: ERROR_CODE_GET_RUNNING_IMAGE_INFO_FROM_PEER_SUPERVISOR_FAILED represents case when we\nfail to get information from peer supervisor.\n - ERROR_CODE_EOS_TA_ARCHITECTURE_INCOMPATIBLE: ERROR_CODE_EOS_TA_ARCHITECTURE_INCOMPATIBLE represents the case where EOS architecture and\nTerminAttr architecture are incompatible.\n - ERROR_CODE_TA_CV_INCOMPATIBLE: ERROR_CODE_TA_CV_INCOMPATIBLE represents the case where TerminAttr is too low for CV to\nsupport or manage the device.\n - ERROR_CODE_EOS_CV_INCOMPATIBLE: ERROR_CODE_EOS_CV_INCOMPATIBLE represents the case where EOS is too low for CV to support\nor manage the device.\n - ERROR_CODE_EOS_SUPPORT_NOT_INTRODUCED: ERROR_CODE_EOS_SUPPORT_NOT_INTRODUCED represents the case where the given EOS version does\nnot support the SKU.\n - ERROR_CODE_EOS_SUPPORT_REMOVED: ERROR_CODE_EOS_SUPPORT_REMOVED represents the case where the given EOS version no longer\nsupports the SKU.\n - ERROR_CODE_PHYSICAL_DEVICE_EOS_INCOMPATIBLE: ERROR_CODE_PHYSICAL_DEVICE_EOS_INCOMPATIBLE represents the case where the physical device\ndoes not support the given EOS type.\n - ERROR_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE: ERROR_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE represents the case where the extension TerminAttr\nversion is lower than the embedded TerminAttr version in SWI.\n - ERROR_CODE_DEVICE_EOS_2GB_INCOMPATIBLE: ERROR_CODE_DEVICE_EOS_2GB_INCOMPATIBLE represents the case where a 2GB-device is incompatible\nwith a non-2GB EOS or a non-2GB device is incompatible with a 2GB-EOS.\n - ERROR_CODE_EOS_EXTENSION_VERSION_INCOMPATIBLE: ERROR_CODE_EOS_EXTENSION_VERSION_INCOMPATIBLE represents the case where the given extension\nversion doesn't support the given EOS version.\n - ERROR_CODE_ARCH_UNSUPPORTED: ERROR_CODE_ARCH_UNSUPPORTED represents the case where the given image architecture is not\nsupported by CloudVision.\n - ERROR_CODE_EOS_EXTENSION_ARCHITECTURE_INCOMPATIBLE: ERROR_CODE_EOS_EXTENSION_ARCHITECTURE_INCOMPATIBLE represents the case where EOS architecture\nand Extension architecture are incompatible."
     },
     "arista.imagestatus.v1.Extension": {
       "type": "object",
@@ -3766,6 +3773,17 @@
       },
       "description": "ImageMetadata provides information regarding the software image."
     },
+    "arista.imagestatus.v1.ImageSource": {
+      "type": "string",
+      "enum": [
+        "IMAGE_SOURCE_UNSPECIFIED",
+        "IMAGE_SOURCE_STUDIO",
+        "IMAGE_SOURCE_NETWORK_PROVISIONING",
+        "IMAGE_SOURCE_HIERARCHY"
+      ],
+      "default": "IMAGE_SOURCE_UNSPECIFIED",
+      "description": "ImageSource indicates the source type for the image configuration.\n\n - IMAGE_SOURCE_UNSPECIFIED: IMAGE_SOURCE_UNSPECIFIED uninitialized value\n - IMAGE_SOURCE_STUDIO: IMAGE_SOURCE_STUDIO - image configured from studio\n - IMAGE_SOURCE_NETWORK_PROVISIONING: IMAGE_SOURCE_NETWORK_PROVISIONING - image configured from\nnetwork provisioning workflow\n - IMAGE_SOURCE_HIERARCHY: IMAGE_SOURCE_HIERARCHY - image configured from hierarchy workflow"
+    },
     "arista.imagestatus.v1.ImageSummary": {
       "type": "object",
       "properties": {
@@ -3864,10 +3882,11 @@
       "type": "string",
       "enum": [
         "INFO_CODE_UNSPECIFIED",
-        "INFO_CODE_NEWER_VERSION_AVAILABLE"
+        "INFO_CODE_NEWER_VERSION_AVAILABLE",
+        "INFO_CODE_UNIVERSAL_IMAGE_ARCH_APPLIED"
       ],
       "default": "INFO_CODE_UNSPECIFIED",
-      "description": "InfoCode indicates info messages produced during image validations.\n\n - INFO_CODE_UNSPECIFIED: INFO_CODE_UNSPECIFIED indicates info code is unspecified.\n - INFO_CODE_NEWER_VERSION_AVAILABLE: INFO_CODE_NEWER_VERSION_AVAILABLE represents cases where a newer EOS maintainance\nrelease is available for download."
+      "description": "InfoCode indicates info messages produced during image validations.\n\n - INFO_CODE_UNSPECIFIED: INFO_CODE_UNSPECIFIED indicates info code is unspecified.\n - INFO_CODE_NEWER_VERSION_AVAILABLE: INFO_CODE_NEWER_VERSION_AVAILABLE represents cases where a newer EOS maintainance\nrelease is available for download.\n - INFO_CODE_UNIVERSAL_IMAGE_ARCH_APPLIED: INFO_CODE_UNIVERSAL_IMAGE_ARCH_APPLIED represents cases where a specific architecture is\npicked for a Universal (multiarch) EOS image."
     },
     "arista.imagestatus.v1.RebootRequired": {
       "type": "object",
@@ -3985,7 +4004,7 @@
         "WARNING_CODE_BUGALERTS_DATA_MISSING"
       ],
       "default": "WARNING_CODE_UNSPECIFIED",
-      "description": "WarningCode indicates warnings produced during image validations.\n\n - WARNING_CODE_UNSPECIFIED: WARNING_CODE_UNSPECIFIED indicates warning code is unspecified.\n - WARNING_CODE_NOT_APPLICABLE: WARNING_CODE_NOT_APPLICABLE represents cases where EOS \u003c - \u003e SKU/TA compatibility\nis not applicable for non physical switches like vEos.\n - WARNING_CODE_SKUINFO_UNAVAILABLE: WARNING_CODE_SKUINFO_UNAVAILABLE represents case where\ninformation about certain skus is missing.\n - WARNING_CODE_DEVICE_SKU_UNAVAILABLE: WARNING_CODE_DEVICE_SKU_UNAVAILABLE represents unavailability of skus for an EOS Device.\n - WARNING_CODE_SWI_UNKNOWN: WARNING_CODE_SWI_UNKNOWN represents cases where EOS version is not found in release database.\n - WARNING_CODE_TA_EOS_INCOMPATIBLE: WARNING_CODE_TA_EOS_INCOMPATIBLE represents cases where TA and EOS are not compatible.\nTA is lower than embedded TA in swi or given TA is unsupported by the EOS.\n - WARNING_CODE_TA_CV_INCOMPATIBLE: WARNING_CODE_TA_CV_INCOMPATIBLE represents cases where TA is incompatible with CV.\nTA is lower than minimum supported TA on CV.\nDeprecated - use ERROR_CODE_TA_CV_INCOMPATIBLE.\n - WARNING_CODE_EOS_CV_INCOMPATIBLE: WARNING_CODE_EOS_CV_INCOMPATIBLE represents the case where EOS is not yet supported by CV.\nThe given EOS exceeds CV's maximum supported EOS version.\n - WARNING_CODE_EOS_ARCH_UNKNOWN: WARNING_CODE_EOS_ARCH_UNKNOWN represents cases where the specified architecture is\nnot valid for EOS.\n - WARNING_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE: WARNING_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE represents cases where TA extension is lower\nin version than embedded TA in SWI.\n - WARNING_CODE_ARCH_INCOMPATIBLE: WARNING_CODE_ARCH_INCOMPATIBLE represents cases where EOS arch and TA arch are\ndifferent. Deprecated.\n - WARNING_CODE_EOS_END_OF_LIFE_DATE_PASSED: WARNING_CODE_EOS_END_OF_LIFE_DATE_PASSED represents cases where the given EOS has passed\nits end of life date.\n - WARNING_CODE_SUPPORT_NOT_INTRODUCED: WARNING_CODE_SUPPORT_NOT_INTRODUCED represents cases where the given EOS version does\nnot support the SKUs.\n - WARNING_CODE_SUPPORT_REMOVED: WARNING_CODE_SUPPORT_REMOVED represents cases where the given EOS version no longer\nsupports the SKUs.\n - WARNING_CODE_RUNNING_TA_BELOW_MIN_SUPPORTED_VERSION: WARNING_CODE_RUNNING_TA_BELOW_MIN_SUPPORTED_VERSION represents cases where the running\nTerminAttr version is below CloudVision's minimum supported version.\n - WARNING_CODE_TA_STUDIO_INCOMPATIBLE: WARNING_CODE_TA_STUDIO_INCOMPATIBLE represents cases where the TerminAttr is incompatible\nwith Software Management Studio.\n - WARNING_CODE_BUGALERTS_DATA_MISSING: WARNING_CODE_BUGALERTS_DATA_MISSING represents cases where some of the BugAlerts data\nunder Aeris analytics dataset is missing."
+      "description": "WarningCode indicates warnings produced during image validations.\n\n - WARNING_CODE_UNSPECIFIED: WARNING_CODE_UNSPECIFIED indicates warning code is unspecified.\n - WARNING_CODE_NOT_APPLICABLE: WARNING_CODE_NOT_APPLICABLE represents cases where EOS \u003c - \u003e SKU/TA compatibility\nis not applicable for non physical switches like vEos.\n - WARNING_CODE_SKUINFO_UNAVAILABLE: WARNING_CODE_SKUINFO_UNAVAILABLE represents case where\ninformation about certain skus is missing.\n - WARNING_CODE_DEVICE_SKU_UNAVAILABLE: WARNING_CODE_DEVICE_SKU_UNAVAILABLE represents unavailability of skus for an EOS Device.\n - WARNING_CODE_SWI_UNKNOWN: WARNING_CODE_SWI_UNKNOWN represents cases where EOS version is not found in release database.\n - WARNING_CODE_TA_EOS_INCOMPATIBLE: WARNING_CODE_TA_EOS_INCOMPATIBLE represents cases where TA and EOS are not compatible.\nTA is lower than embedded TA in swi or given TA is unsupported by the EOS.\n - WARNING_CODE_TA_CV_INCOMPATIBLE: WARNING_CODE_TA_CV_INCOMPATIBLE represents cases where TA is lower than CV's minimum\nsupported version for SMS assignments.\n - WARNING_CODE_EOS_CV_INCOMPATIBLE: WARNING_CODE_EOS_CV_INCOMPATIBLE represents the case where EOS is not supported by CV.\nThe given EOS exceeds CV's maximum supported EOS version or for SMS assignments, the given\nEOS is below CV's minimum supported EOS version.\n - WARNING_CODE_EOS_ARCH_UNKNOWN: WARNING_CODE_EOS_ARCH_UNKNOWN represents cases where the specified architecture is\nnot valid for EOS.\n - WARNING_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE: WARNING_CODE_TA_EMBEDDEDEXT_INCOMPATIBLE represents cases where TA extension is lower\nin version than embedded TA in SWI.\n - WARNING_CODE_ARCH_INCOMPATIBLE: WARNING_CODE_ARCH_INCOMPATIBLE represents cases where EOS arch and TA arch are\ndifferent. Deprecated.\n - WARNING_CODE_EOS_END_OF_LIFE_DATE_PASSED: WARNING_CODE_EOS_END_OF_LIFE_DATE_PASSED represents cases where the given EOS has passed\nits end of life date.\n - WARNING_CODE_SUPPORT_NOT_INTRODUCED: WARNING_CODE_SUPPORT_NOT_INTRODUCED represents cases where the given EOS version does\nnot support the SKUs.\n - WARNING_CODE_SUPPORT_REMOVED: WARNING_CODE_SUPPORT_REMOVED represents cases where the given EOS version no longer\nsupports the SKUs.\n - WARNING_CODE_RUNNING_TA_BELOW_MIN_SUPPORTED_VERSION: WARNING_CODE_RUNNING_TA_BELOW_MIN_SUPPORTED_VERSION represents cases where the running\nTerminAttr version is below CloudVision's minimum supported version.\n - WARNING_CODE_TA_STUDIO_INCOMPATIBLE: WARNING_CODE_TA_STUDIO_INCOMPATIBLE represents cases where the TerminAttr is incompatible\nwith Software Management Studio.\n - WARNING_CODE_BUGALERTS_DATA_MISSING: WARNING_CODE_BUGALERTS_DATA_MISSING represents cases where some of the BugAlerts data\nunder Aeris analytics dataset is missing."
     },
     "arista.subscriptions.Operation": {
       "type": "string",
@@ -3994,10 +4013,13 @@
         "INITIAL",
         "INITIAL_SYNC_COMPLETE",
         "UPDATED",
-        "DELETED"
+        "DELETED",
+        "PARTIAL_DELETE",
+        "BATCH_START",
+        "BATCH_END"
       ],
       "default": "UNSPECIFIED",
-      "description": " - INITIAL: INITIAL indicates the associated notification is that of the\ncurrent state and a fully-specified Resource is provided.\n - INITIAL_SYNC_COMPLETE: INITIAL_SYNC_COMPLETE indicates all existing-state has been\nstreamed to the client. This status will be sent in an\notherwise-empty message and no subsequent INITIAL messages\nshould be expected.\n - UPDATED: UPDATED indicates the associated notification carries\nmodification to the last-streamed state. This indicates\nthe contained Resource may be a partial diff, though, it\nmay contain a fully-specified Resource.\n - DELETED: DETLETED indicates the associated notification carries\na deletion. The Resource's key will always be set in this case,\nbut no other fields should be expected."
+      "description": " - INITIAL: INITIAL indicates the associated notification is that of the\ncurrent state and a fully-specified Resource is provided.\n - INITIAL_SYNC_COMPLETE: INITIAL_SYNC_COMPLETE indicates all existing-state has been\nstreamed to the client. This status will be sent in an\notherwise-empty message and no subsequent INITIAL messages\nshould be expected.\n - UPDATED: UPDATED indicates the associated notification carries\nmodification to the last-streamed state. This indicates\nthe contained Resource may be a partial diff, though, it\nmay contain a fully-specified Resource.\n - DELETED: DETLETED indicates the associated notification carries\na deletion. The Resource's key will always be set in this case,\nbut no other fields should be expected.\n - PARTIAL_DELETE: PARTIAL_DELETE indicates the associated notification carries\ndeletions of specific fields within the last-streamed state.\nThe Resource's key is always set.\n - BATCH_START: BATCH_START indicates the beginning of a batch of notifications.\nThis message will carry no resource value. A corresponding BATCH_END\nmessage will mark the end of the batch. The semantics of what a\nbatch means is defined by the service.\n - BATCH_END: BATCH_END indicates the end of a batch of notifications that\nbegan with a BATCH_START message. This message will carry no\nresource value."
     },
     "arista.time.TimeBounds": {
       "type": "object",
@@ -4229,7 +4251,7 @@
         },
         "keyPath": {
           "$ref": "#/definitions/fmp.RepeatedString",
-          "description": "key_path is used to locate list elements when they have\nstable keys instead of numeric indices.\n\nSyntax: [field=value]\n- field: the unique key field of the element\n- value: the element’s identifier\n\nExample:\n  users = [{\"id\":\"u1\",\"name\":\"Alice\"}]\n  key_path = [\"users\", \"[id=u1]\", \"name\"]\n  path     = [\"users\", \"0\", \"name\"]"
+          "description": "key_path is used to locate list elements when they have\nstable keys instead of numeric indices.\n\nSyntax: [field=value]\n- field: the unique key field of the element\n- value: the element’s identifier\n\nExample:\n  users = [\\{\"id\":\"u1\",\"name\":\"Alice\"\\}]\n  key_path = [\"users\", \"[id=u1]\", \"name\"]\n  path     = [\"users\", \"0\", \"name\"]"
         }
       },
       "description": "DiffEntry represents a change detected between two versions of an entity."
@@ -4251,7 +4273,7 @@
         },
         "entityIds": {
           "$ref": "#/definitions/fmp.RepeatedString",
-          "title": "entity_ids uniquely identifies the entity in the workspace. It is represented\nby [key1, value1, key2, value2, ...]\nstudio_id are well known e.g studio-date-time\ne.g entity_ids for entity types\nstudio, inputs, assigned tags: [“studio_id”, \u003cid\u003e]\nbuildhook: [“studio_id”, \u003cid\u003e, “hook_id”, \u003cid\u003e]\nautofill: [“studio_id”, \u003cid\u003e, “input_field_id”, \u003cid\u003e]\nconfiglet: [“configlet_id”, \u003cid\u003e]\nconfigletassignment : [“configlet_assignment_id”, \u003cid\u003e]\ntags:\nelement_type is one of \"1\" (device), \"2\" (interface)\n[\"creator_type\", \"2\", \"element_type\", \u003celement_type\u003e,\n\"element_sub_type\", \"1\", \"label\", \u003clabel\u003e, \"value\", \u003cvalue\u003e]\ntag assignments:\nFor element_type = \"1\" (device)\n[\"creator_type\", \"2\", \"element_type\", \"1\", \"element_sub_type\", \"1\",\n\"label\", \u003clabel\u003e, \"value\", \u003cvalue\u003e, \"device_id\", \u003cid\u003e]\nFor element_type = \"2\" (interface)\n[\"creator_type\", \"2\", \"element_type\", \"2\", \"element_sub_type\", \"1\",\n\"label\", \u003clabel\u003e, \"value\", \u003cvalue\u003e, \"device_id\", \u003cid\u003e,\n\"interface_id\", \u003cid\u003e]"
+          "title": "entity_ids uniquely identifies the entity in the workspace. It is represented\nby [key1, value1, key2, value2, ...]\nstudio_id are well known e.g studio-date-time\ne.g entity_ids for entity types\n  studio, inputs, assigned tags, dependencies: [“studio_id”, \u003cid\u003e]\n  buildhook: [“studio_id”, \u003cid\u003e, “hook_id”, \u003cid\u003e]\n  autofill: [“studio_id”, \u003cid\u003e, “input_field_id”, \u003cid\u003e]\n  configlet: [“configlet_id”, \u003cid\u003e]\n  configletassignment: [“configlet_assignment_id”, \u003cid\u003e]\n  tags:\n    element_type is one of “1” (device), “2” (interface)\n    [“creator_type”, “2”, “element_type”, \u003celement_type\u003e,\n     “element_sub_type”, “1”, “label”, \u003clabel\u003e, “value”, \u003cvalue\u003e]\n  tag assignments:\n    For element_type = “1” (device)\n      [“creator_type”, “2”, “element_type”, “1”, “element_sub_type”, “1”,\n       “label”, \u003clabel\u003e, “value”, \u003cvalue\u003e, “device_id”, \u003cid\u003e]\n    For element_type = “2” (interface)\n      [“creator_type”, “2”, “element_type”, “2”, “element_sub_type”, “1”,\n       “label”, \u003clabel\u003e, “value”, \u003cvalue\u003e, “device_id”, \u003cid\u003e,\n       “interface_id”, \u003cid\u003e]\n  hierarchy related entities:\n    node: [“node_id”, \u003cid\u003e]\n    fixture_class: [“fixture_class_id”, \u003cid\u003e]\n    fixture_instance: [“fixture_instance_id”, \u003cid\u003e]\n    processor: [“processor_id”, \u003cid\u003e]"
         }
       },
       "description": "DiffKey represents the key that identifies a diff for an entity.",
@@ -4295,10 +4317,15 @@
         "ENTITY_TYPE_CONFIGLET",
         "ENTITY_TYPE_CONFIGLET_ASSIGNMENT",
         "ENTITY_TYPE_TAG",
-        "ENTITY_TYPE_TAG_ASSIGNMENT"
+        "ENTITY_TYPE_TAG_ASSIGNMENT",
+        "ENTITY_TYPE_FIXTURE_INSTANCE",
+        "ENTITY_TYPE_FIXTURE_CLASS",
+        "ENTITY_TYPE_PROCESSOR",
+        "ENTITY_TYPE_NODE",
+        "ENTITY_TYPE_DEPENDENCIES"
       ],
       "default": "ENTITY_TYPE_UNSPECIFIED",
-      "description": "EntityType enumerates the different types of entities that can be\ncompared or referenced in a diff operation.\n\n - ENTITY_TYPE_UNSPECIFIED: ENTITY_TYPE_UNSPECIFIED indicates an unspecified entity type.\n - ENTITY_TYPE_STUDIO: ENTITY_TYPE_STUDIO indicates the Studio entity type.\n - ENTITY_TYPE_INPUTS: ENTITY_TYPE_INPUTS indicates the Inputs entity type.\n - ENTITY_TYPE_ASSIGNED_TAGS: ENTITY_TYPE_ASSIGNED_TAGS indicates the AssignedTags entity type.\n - ENTITY_TYPE_BUILD_HOOK: ENTITY_TYPE_BUILD_HOOK indicates the BuildHook entity type.\n - ENTITY_TYPE_AUTOFILL_ACTION: ENTITY_TYPE_AUTOFILL_ACTION indicates the AutofillAction entity type.\n - ENTITY_TYPE_CONFIGLET: ENTITY_TYPE_CONFIGLET indicates the Configlet entity type for\nstatic configuration studio.\n - ENTITY_TYPE_CONFIGLET_ASSIGNMENT: ENTITY_TYPE_CONFIGLET_ASSIGNMENT indicates the ConfigletAssignment\nentity type for static configuration studio.\n - ENTITY_TYPE_TAG: ENTITY_TYPE_TAG indicates the tags entity type.\n - ENTITY_TYPE_TAG_ASSIGNMENT: ENTITY_TYPE_TAG_ASSIGNMENT indicates the tag assignment entity type."
+      "description": "EntityType enumerates the different types of entities that can be\ncompared or referenced in a diff operation.\n\n - ENTITY_TYPE_UNSPECIFIED: ENTITY_TYPE_UNSPECIFIED indicates an unspecified entity type.\n - ENTITY_TYPE_STUDIO: ENTITY_TYPE_STUDIO indicates the Studio entity type.\n - ENTITY_TYPE_INPUTS: ENTITY_TYPE_INPUTS indicates the Inputs entity type.\n - ENTITY_TYPE_ASSIGNED_TAGS: ENTITY_TYPE_ASSIGNED_TAGS indicates the AssignedTags entity type.\n - ENTITY_TYPE_BUILD_HOOK: ENTITY_TYPE_BUILD_HOOK indicates the BuildHook entity type.\n - ENTITY_TYPE_AUTOFILL_ACTION: ENTITY_TYPE_AUTOFILL_ACTION indicates the AutofillAction entity type.\n - ENTITY_TYPE_CONFIGLET: ENTITY_TYPE_CONFIGLET indicates the Configlet entity type for\nstatic configuration studio.\n - ENTITY_TYPE_CONFIGLET_ASSIGNMENT: ENTITY_TYPE_CONFIGLET_ASSIGNMENT indicates the ConfigletAssignment\nentity type for static configuration studio.\n - ENTITY_TYPE_TAG: ENTITY_TYPE_TAG indicates the tags entity type.\n - ENTITY_TYPE_TAG_ASSIGNMENT: ENTITY_TYPE_TAG_ASSIGNMENT indicates the tag assignment entity type.\n - ENTITY_TYPE_FIXTURE_INSTANCE: ENTITY_TYPE_FIXTURE_INSTANCE indicates the FixtureInstance entity type.\n - ENTITY_TYPE_FIXTURE_CLASS: ENTITY_TYPE_FIXTURE_CLASS indicates the FixtureClass entity type.\n - ENTITY_TYPE_PROCESSOR: ENTITY_TYPE_PROCESSOR indicates the Processor entity type.\n - ENTITY_TYPE_NODE: ENTITY_TYPE_NODE indicates the Node entity type.\n - ENTITY_TYPE_DEPENDENCIES: ENTITY_TYPE_DEPENDENCIES indicates the dependencies entity type."
     },
     "arista.workspace.v1.HierarchyBuildStatus": {
       "type": "object",
@@ -4327,6 +4354,43 @@
       "description": "- HIERARCHY_BUILD_STATUS_CODE_UNSPECIFIED: HIERARCHY_BUILD_STATUS_CODE_UNSPECIFIED is the default value indicating an unspecified build status.\n - HIERARCHY_BUILD_STATUS_CODE_RUNNING: HIERARCHY_BUILD_STATUS_CODE_RUNNING indicates that the build is running.\n - HIERARCHY_BUILD_STATUS_CODE_SUCCESS: HIERARCHY_BUILD_STATUS_CODE_SUCCESS indicates that the build has completed successfully\nwithout any errors.\n - HIERARCHY_BUILD_STATUS_CODE_FAILURE: HIERARCHY_BUILD_STATUS_CODE_FAILURE indicates that the build has completed unsuccesfully\nwith errors.\n - HIERARCHY_BUILD_STATUS_CODE_CANCELED: HIERARCHY_BUILD_STATUS_CODE_CANCELED indicates that the build was canceled.",
       "title": "HierarchyBuildStatusCode enumerates the various statuses for a build.\nduplicated from hierarchy.v1.BuildStatus"
     },
+    "arista.workspace.v1.HierarchyError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "message is the error message."
+        },
+        "code": {
+          "$ref": "#/definitions/arista.workspace.v1.HierarchyErrorCode",
+          "description": "code is the error code of hierarchy error."
+        }
+      },
+      "description": "HierarchyError holds the details for a hierarchy\nvalidation error."
+    },
+    "arista.workspace.v1.HierarchyErrorCode": {
+      "type": "string",
+      "enum": [
+        "HIERARCHY_ERROR_CODE_UNSPECIFIED",
+        "HIERARCHY_ERROR_CODE_INPUT_VALIDATION"
+      ],
+      "default": "HIERARCHY_ERROR_CODE_UNSPECIFIED",
+      "description": "HierarchyErrorCode is an error code related to hierarchy.\n\n - HIERARCHY_ERROR_CODE_UNSPECIFIED: HIERARCHY_ERROR_CODE_UNSPECIFIED indicates unspecified hierarchy error code.\n - HIERARCHY_ERROR_CODE_INPUT_VALIDATION: HIERARCHY_ERROR_CODE_INPUT_VALIDATION indicates an input validation error\nfor software image assignments in hierarchy."
+    },
+    "arista.workspace.v1.HierarchyErrors": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/arista.workspace.v1.HierarchyError"
+          },
+          "description": "values is a list of HierarchyError."
+        }
+      },
+      "description": "HierarchyErrors is a list of HierarchyError."
+    },
     "arista.workspace.v1.ImageValidationResult": {
       "type": "object",
       "properties": {
@@ -4349,6 +4413,10 @@
         "infos": {
           "$ref": "#/definitions/arista.imagestatus.v1.ImageInfos",
           "description": "infos are any info messages about the generated image."
+        },
+        "imageSource": {
+          "$ref": "#/definitions/arista.imagestatus.v1.ImageSource",
+          "description": "image_source identifies the source of the image."
         }
       },
       "description": "ImageValidationResult holds the result of an image validation stage."
@@ -4421,6 +4489,10 @@
         "inputWarnings": {
           "$ref": "#/definitions/arista.workspace.v1.InputWarnings",
           "description": "input_warnings are warnings for values assigned to fields in the input schema."
+        },
+        "hierarchyErrors": {
+          "$ref": "#/definitions/arista.workspace.v1.HierarchyErrors",
+          "description": "hierarchy_errors are errors for hierarchy."
         }
       },
       "description": "InputValidationResult holds the result of an input validation build stage."
@@ -4593,19 +4665,6 @@
         }
       },
       "description": "StudioGeneratedConfiguration returns the configuration generated by a studio for a given device."
-    },
-    "arista.workspace.v1.StudioGeneratedConfigurationBatchedStreamResponse": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/arista.workspace.v1.StudioGeneratedConfigurationStreamResponse"
-          },
-          "description": "Values are the values deemed relevant to the initiating request.\nThe length of this structure is guaranteed to be between (inclusive) 1 and\nmin(req.max_messages, INTERNAL_BATCH_LIMIT)."
-        }
-      }
     },
     "arista.workspace.v1.StudioGeneratedConfigurationKey": {
       "type": "object",
@@ -4830,22 +4889,13 @@
         "excludeNetworkProvisioning": {
           "type": "boolean",
           "description": "exclude_network_provisioning indicates whether the workspace is\nconfigured to exclude Network Provisioning."
+        },
+        "decommissionRequestIds": {
+          "$ref": "#/definitions/fmp.MapStringString",
+          "description": "decommission_request_ids provides, for each device staged for\ndecommission in this workspace, the corresponding request UUID passed\nto inventory.v1.DeviceDecommissioningConfig. These request UUIDs can\nbe used to track the status using the inventory.v1.DeviceDecommissioning\nresource."
         }
       },
       "description": "Workspace holds the status of a workspace."
-    },
-    "arista.workspace.v1.WorkspaceBatchedStreamResponse": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/arista.workspace.v1.WorkspaceStreamResponse"
-          },
-          "description": "Values are the values deemed relevant to the initiating request.\nThe length of this structure is guaranteed to be between (inclusive) 1 and\nmin(req.max_messages, INTERNAL_BATCH_LIMIT)."
-        }
-      }
     },
     "arista.workspace.v1.WorkspaceBuild": {
       "type": "object",
@@ -4880,19 +4930,6 @@
         }
       },
       "description": "WorkspaceBuild holds the details for a build of a workspace."
-    },
-    "arista.workspace.v1.WorkspaceBuildBatchedStreamResponse": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/arista.workspace.v1.WorkspaceBuildStreamResponse"
-          },
-          "description": "Values are the values deemed relevant to the initiating request.\nThe length of this structure is guaranteed to be between (inclusive) 1 and\nmin(req.max_messages, INTERNAL_BATCH_LIMIT)."
-        }
-      }
     },
     "arista.workspace.v1.WorkspaceBuildDetails": {
       "type": "object",
@@ -4951,19 +4988,6 @@
         }
       },
       "description": "WorkspaceBuildDetails holds the details for a build of a device in a workspace."
-    },
-    "arista.workspace.v1.WorkspaceBuildDetailsBatchedStreamResponse": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/arista.workspace.v1.WorkspaceBuildDetailsStreamResponse"
-          },
-          "description": "Values are the values deemed relevant to the initiating request.\nThe length of this structure is guaranteed to be between (inclusive) 1 and\nmin(req.max_messages, INTERNAL_BATCH_LIMIT)."
-        }
-      }
     },
     "arista.workspace.v1.WorkspaceBuildDetailsKey": {
       "type": "object",
@@ -5204,19 +5228,6 @@
       },
       "description": "WorkspaceConfig holds the configuration of a workspace."
     },
-    "arista.workspace.v1.WorkspaceConfigBatchedStreamResponse": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/arista.workspace.v1.WorkspaceConfigStreamResponse"
-          },
-          "description": "Values are the values deemed relevant to the initiating request.\nThe length of this structure is guaranteed to be between (inclusive) 1 and\nmin(req.max_messages, INTERNAL_BATCH_LIMIT)."
-        }
-      }
-    },
     "arista.workspace.v1.WorkspaceConfigDeleteAllResponse": {
       "type": "object",
       "properties": {
@@ -5448,19 +5459,6 @@
       },
       "description": "WorkspaceDiffs represents diffs, or changes made in the\nworkspace of a given type."
     },
-    "arista.workspace.v1.WorkspaceDiffsBatchedStreamResponse": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/arista.workspace.v1.WorkspaceDiffsStreamResponse"
-          },
-          "description": "Values are the values deemed relevant to the initiating request.\nThe length of this structure is guaranteed to be between (inclusive) 1 and\nmin(req.max_messages, INTERNAL_BATCH_LIMIT)."
-        }
-      }
-    },
     "arista.workspace.v1.WorkspaceDiffsResponse": {
       "type": "object",
       "properties": {
@@ -5668,19 +5666,6 @@
         }
       },
       "description": "WorkspaceSyncConfig holds the list of devices to be synced in workspace."
-    },
-    "arista.workspace.v1.WorkspaceSyncConfigBatchedStreamResponse": {
-      "type": "object",
-      "properties": {
-        "responses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/arista.workspace.v1.WorkspaceSyncConfigStreamResponse"
-          },
-          "description": "Values are the values deemed relevant to the initiating request.\nThe length of this structure is guaranteed to be between (inclusive) 1 and\nmin(req.max_messages, INTERNAL_BATCH_LIMIT)."
-        }
-      }
     },
     "arista.workspace.v1.WorkspaceSyncConfigDeleteAllResponse": {
       "type": "object",
@@ -5895,6 +5880,19 @@
       ],
       "default": "DELETE_ERROR_UNSPECIFIED",
       "description": "DeleteError defines the set of delete error types.\n\n - DELETE_ERROR_UNSPECIFIED: DELETE_ERROR_UNSPECIFIED indicates that the delete error\nis not specified.\n - DELETE_ERROR_UNAUTHORIZED: DELETE_ERROR_UNAUTHORIZED indicates that the user is not authorized\nto perform the specified delete.\n - DELETE_ERROR_INTERNAL: DELETE_ERROR_INTERNAL indicates that the server encountered an\nunrecoverable error on the specified delete.\n - DELETE_ERROR_UNDELETABLE_KEY: DELETE_ERROR_UNDELETABLE_KEY indicates that the specified error is\nnot allowed by the service."
+    },
+    "fmp.MapStringString": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The map\u003cstring, string\u003e values."
+        }
+      },
+      "description": "Wrapper message for `map\u003cstring, string\u003e`."
     },
     "fmp.RepeatedString": {
       "type": "object",

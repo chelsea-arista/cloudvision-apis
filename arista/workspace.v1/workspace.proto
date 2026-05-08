@@ -216,6 +216,12 @@ message Workspace {
 	// exclude_network_provisioning indicates whether the workspace is
 	// configured to exclude Network Provisioning.
 	google.protobuf.BoolValue exclude_network_provisioning = 15;
+	// decommission_request_ids provides, for each device staged for
+	// decommission in this workspace, the corresponding request UUID passed
+	// to inventory.v1.DeviceDecommissioningConfig. These request UUIDs can
+	// be used to track the status using the inventory.v1.DeviceDecommissioning
+	// resource.
+	fmp.MapStringString decommission_request_ids = 16;
 }
 
 // BuildState enumerates the set of states that a BuildStage can be in during a
@@ -276,6 +282,30 @@ message InputErrors {
 	repeated InputError values = 1;
 }
 
+// HierarchyErrorCode is an error code related to hierarchy.
+enum HierarchyErrorCode {
+	// HIERARCHY_ERROR_CODE_UNSPECIFIED indicates unspecified hierarchy error code.
+	HIERARCHY_ERROR_CODE_UNSPECIFIED = 0;
+	// HIERARCHY_ERROR_CODE_INPUT_VALIDATION indicates an input validation error
+	// for software image assignments in hierarchy.
+	HIERARCHY_ERROR_CODE_INPUT_VALIDATION = 1;
+}
+
+// HierarchyError holds the details for a hierarchy
+// validation error.
+message HierarchyError {
+	// message is the error message.
+	google.protobuf.StringValue message = 1;
+	// code is the error code of hierarchy error.
+	HierarchyErrorCode code = 2;
+}
+
+// HierarchyErrors is a list of HierarchyError.
+message HierarchyErrors {
+	// values is a list of HierarchyError.
+	repeated HierarchyError values = 1;
+}
+
 // InputWarning holds the details for a warning on a studio input field or value.
 message InputWarning {
 	// field_id is the ID of the input field.
@@ -305,6 +335,8 @@ message InputValidationResult {
 	reserved 4;
 	// input_warnings are warnings for values assigned to fields in the input schema.
 	InputWarnings input_warnings = 5;
+	// hierarchy_errors are errors for hierarchy.
+	HierarchyErrors hierarchy_errors = 6;
 }
 
 // InputValidationResults is a collection of InputValidationResult (one per studio).
@@ -381,6 +413,8 @@ message ImageValidationResult {
 	google.protobuf.StringValue image_input_error = 4;
 	// infos are any info messages about the generated image.
 	arista.imagestatus.v1.ImageInfos infos = 5;
+	// image_source identifies the source of the image.
+	arista.imagestatus.v1.ImageSource image_source = 6;
 }
 
 // ConfigSyncResult holds the result of config sync operation.
@@ -690,6 +724,16 @@ enum EntityType {
 	ENTITY_TYPE_TAG = 8;
 	// ENTITY_TYPE_TAG_ASSIGNMENT indicates the tag assignment entity type.
 	ENTITY_TYPE_TAG_ASSIGNMENT = 9;
+	// ENTITY_TYPE_FIXTURE_INSTANCE indicates the FixtureInstance entity type.
+	ENTITY_TYPE_FIXTURE_INSTANCE = 10;
+	// ENTITY_TYPE_FIXTURE_CLASS indicates the FixtureClass entity type.
+	ENTITY_TYPE_FIXTURE_CLASS = 11;
+	// ENTITY_TYPE_PROCESSOR indicates the Processor entity type.
+	ENTITY_TYPE_PROCESSOR = 12;
+	// ENTITY_TYPE_NODE indicates the Node entity type.
+	ENTITY_TYPE_NODE = 13;
+	// ENTITY_TYPE_DEPENDENCIES indicates the dependencies entity type.
+	ENTITY_TYPE_DEPENDENCIES = 14;
 }
 
 // DiffType enumerates types of diff.
@@ -762,23 +806,28 @@ message DiffKey {
 	// by [key1, value1, key2, value2, ...]
 	// studio_id are well known e.g studio-date-time
 	// e.g entity_ids for entity types
-	// studio, inputs, assigned tags: [“studio_id”, <id>]
-	// buildhook: [“studio_id”, <id>, “hook_id”, <id>]
-	// autofill: [“studio_id”, <id>, “input_field_id”, <id>]
-	// configlet: [“configlet_id”, <id>]
-	// configletassignment : [“configlet_assignment_id”, <id>]
-	// tags:
-	// element_type is one of "1" (device), "2" (interface)
-	// ["creator_type", "2", "element_type", <element_type>,
-	// "element_sub_type", "1", "label", <label>, "value", <value>]
-	// tag assignments:
-	// For element_type = "1" (device)
-	// ["creator_type", "2", "element_type", "1", "element_sub_type", "1",
-	// "label", <label>, "value", <value>, "device_id", <id>]
-	// For element_type = "2" (interface)
-	// ["creator_type", "2", "element_type", "2", "element_sub_type", "1",
-	// "label", <label>, "value", <value>, "device_id", <id>,
-	// "interface_id", <id>]
+	//   studio, inputs, assigned tags, dependencies: [“studio_id”, <id>]
+	//   buildhook: [“studio_id”, <id>, “hook_id”, <id>]
+	//   autofill: [“studio_id”, <id>, “input_field_id”, <id>]
+	//   configlet: [“configlet_id”, <id>]
+	//   configletassignment: [“configlet_assignment_id”, <id>]
+	//   tags:
+	//     element_type is one of “1” (device), “2” (interface)
+	//     [“creator_type”, “2”, “element_type”, <element_type>,
+	//      “element_sub_type”, “1”, “label”, <label>, “value”, <value>]
+	//   tag assignments:
+	//     For element_type = “1” (device)
+	//       [“creator_type”, “2”, “element_type”, “1”, “element_sub_type”, “1”,
+	//        “label”, <label>, “value”, <value>, “device_id”, <id>]
+	//     For element_type = “2” (interface)
+	//       [“creator_type”, “2”, “element_type”, “2”, “element_sub_type”, “1”,
+	//        “label”, <label>, “value”, <value>, “device_id”, <id>,
+	//        “interface_id”, <id>]
+	//   hierarchy related entities:
+	//     node: [“node_id”, <id>]
+	//     fixture_class: [“fixture_class_id”, <id>]
+	//     fixture_instance: [“fixture_instance_id”, <id>]
+	//     processor: [“processor_id”, <id>]
 	fmp.RepeatedString entity_ids = 4;
 }
 
